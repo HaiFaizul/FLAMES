@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMES - Find Your Spark ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Configuration & Variables --- */
+        :root {
+            --primary-color: #ff69b4; /* Hot Pink */
+            --secondary-color: #da70d6; /* Orchid */
+            --accent-color: #ffb6c1; /* Light Pink */
+            --text-color: #333;
+            --light-text-color: #fff;
+            --bg-gradient: linear-gradient(135deg, #fde3f4 0%, #e9def5 100%);
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --error-color: #d9534f;
+
+            --font-heading: 'Pacifico', cursive;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        /* --- Base Styles & Reset --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+        }
+
+        /* --- Main Container --- */
+        .container {
+            background: var(--container-bg);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            transition: transform 0.3s ease-out;
+        }
+
+        .container:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+            font-size: 2.8rem; /* Responsive font size */
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px var(--accent-color);
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* --- Form Styles --- */
+        .flames-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Spacing between form elements */
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .name-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2); /* Hot Pink glow */
+        }
+
+        .name-input::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        /* --- Button Styles --- */
+        .submit-btn, .reset-btn {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.4);
+        }
+
+        .submit-btn:hover {
+            background-color: #ff85c1; /* Slightly lighter pink */
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            margin-top: 15px; /* Add space above reset button */
+        }
+
+        .reset-btn:hover {
+            background-color: #ffcdd5;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn:active {
+            transform: translateY(0);
+        }
+
+
+        /* --- Result Area Styles --- */
+        .result-area {
+            margin-top: 30px;
+            padding: 25px;
+            background: var(--accent-color); /* Light pink background for contrast */
+            border-radius: 10px;
+            border: 1px solid var(--primary-color);
+            opacity: 0; /* Initially hidden */
+            transform: translateY(20px); /* Start slightly lower */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            display: none; /* Use display none initially */
+        }
+
+        .result-area.show {
+            display: block; /* Make it visible */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #result-text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        #result-description {
+            font-size: 1.1rem;
+            color: #444; /* Darker text for readability on light bg */
+            margin-bottom: 20px;
+        }
+
+        /* --- Heart Icon & Animation --- */
+        .heart-icon {
+            width: 50px;
+            height: auto;
+            fill: var(--primary-color); /* Heart color */
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Error Message Style --- */
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: -10px; /* Position closer to the input */
+            margin-bottom: 10px;
+            text-align: left;
+            display: none; /* Hidden by default */
+            font-weight: 600;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            .container {
+                padding: 30px 20px;
+            }
+            #result-text {
+                font-size: 1.5rem;
+            }
+            #result-description {
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>FLAMES</h1>
+        <p>Curious about your connection? Enter two names below and let destiny decide!</p>
+
+        <form id="flamesForm" class="flames-form">
+            <div class="input-group">
+                <label for="name1" class="input-label">First Name:</label>
+                <input type="text" id="name1" class="name-input" placeholder="E.g., Romeo" required>
+                <div id="error-name1" class="error-message">Please enter the first name.</div>
+            </div>
+
+            <div class="input-group">
+                <label for="name2" class="input-label">Second Name:</label>
+                <input type="text" id="name2" class="name-input" placeholder="E.g., Juliet" required>
+                 <div id="error-name2" class="error-message">Please enter the second name.</div>
+                 <div id="error-same-name" class="error-message">Names should be different.</div>
+            </div>
+
+            <button type="submit" class="submit-btn">Find Your Spark ✨</button>
+        </form>
+
+        <div id="resultArea" class="result-area">
+            <!-- Embedded SVG Heart -->
+            <svg class="heart-icon" viewBox="0 0 32 29.6">
+              <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2 c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+            <h2 id="result-text"></h2>
+            <p id="result-description"></p>
+            <button id="resetButton" class="reset-btn">Try Again?</button>
+        </div>
+
+        <footer class="footer">
+            Made with <span style="color: var(--primary-color);">❤</span> for fun! Remember, it's just a game.
+        </footer>
+    </div>
+
+    <script>
+        const flamesForm = document.getElementById('flamesForm');
+        const name1Input = document.getElementById('name1');
+        const name2Input = document.getElementById('name2');
+        const resultArea = document.getElementById('resultArea');
+        const resultText = document.getElementById('result-text');
+        const resultDescription = document.getElementById('result-description');
+        const resetButton = document.getElementById('resetButton');
+        const errorName1 = document.getElementById('error-name1');
+        const errorName2 = document.getElementById('error-name2');
+        const errorSameName = document.getElementById('error-same-name');
+
+        const flamesMeaning = {
+            F: { title: "Friends", description: "A bond of camaraderie and support. You're pals!" },
+            L: { title: "Lovers", description: "Passionate sparks fly! There's definite romance here." },
+            A: { title: "Affectionate", description: "A sweet and caring connection, full of fondness." },
+            M: { title: "Marriage", description: "Could it be wedding bells? Destiny hints at a lifelong union!" },
+            E: { title: "Enemies", description: "Uh oh! Maybe opposites don't attract in this case..." },
+            S: { title: "Siblings", description: "A close, familiar bond, like family. You look out for each other." }
+        };
+
+        flamesForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent actual form submission
+
+            // Reset previous errors
+            hideError(errorName1);
+            hideError(errorName2);
+            hideError(errorSameName);
+            name1Input.style.borderColor = '#ddd'; // Reset border
+            name2Input.style.borderColor = '#ddd'; // Reset border
+
+
+            const rawName1 = name1Input.value.trim();
+            const rawName2 = name2Input.value.trim();
+
+            // --- Input Validation ---
+            let isValid = true;
+            if (!rawName1) {
+                showError(errorName1, 'Please enter the first name.');
+                name1Input.style.borderColor = 'var(--error-color)';
+                isValid = false;
+            }
+            if (!rawName2) {
+                showError(errorName2, 'Please enter the second name.');
+                 name2Input.style.borderColor = 'var(--error-color)';
+                isValid = false;
+            }
+            if (rawName1 && rawName2 && rawName1.toLowerCase() === rawName2.toLowerCase()) {
+                showError(errorSameName, 'Names should be different for a fun result!');
+                name1Input.style.borderColor = 'var(--error-color)';
+                name2Input.style.borderColor = 'var(--error-color)';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                 hideResult(); // Hide result if validation fails
+                 return; // Stop processing
+            }
+
+            // --- FLAMES Calculation ---
+            const resultLetter = calculateFlames(rawName1, rawName2);
+
+            // --- Display Result ---
+            displayResult(resultLetter);
+        });
+
+        resetButton.addEventListener('click', function() {
+            name1Input.value = '';
+            name2Input.value = '';
+            hideResult();
+             // Reset errors and borders
+            hideError(errorName1);
+            hideError(errorName2);
+            hideError(errorSameName);
+            name1Input.style.borderColor = '#ddd';
+            name2Input.style.borderColor = '#ddd';
+            name1Input.focus(); // Focus on the first input for convenience
+        });
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideError(element) {
+            element.style.display = 'none';
+        }
+
+
+        function calculateFlames(name1, name2) {
+            // 1. Prepare names: lowercase, remove spaces and non-alphabetic chars
+            let cleanName1 = name1.toLowerCase().replace(/[^a-z]/g, '');
+            let cleanName2 = name2.toLowerCase().replace(/[^a-z]/g, '');
+
+            // Use frequency maps for efficient character counting and removal
+            const freq1 = {};
+            const freq2 = {};
+
+            for (const char of cleanName1) {
+                freq1[char] = (freq1[char] || 0) + 1;
+            }
+            for (const char of cleanName2) {
+                freq2[char] = (freq2[char] || 0) + 1;
+            }
+
+            let commonCount = 0;
+            for (const char in freq1) {
+                if (freq2[char]) {
+                    commonCount += Math.min(freq1[char], freq2[char]);
+                }
+            }
+
+            const totalLength = cleanName1.length + cleanName2.length;
+            const remainingCount = totalLength - (2 * commonCount);
+
+            // Handle edge case where names might become identical after cleaning or have no remainder
+            if (remainingCount <= 0) {
+                 // Return a default or random value if count is 0 or less
+                 // Let's default to 'F' for Friends in this edge case
+                 console.warn("FLAMES count resulted in 0 or less. Defaulting to 'F'. Input names:", name1, name2);
+                 return 'F';
+            }
+
+            // 2. FLAMES striking logic
+            let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
+            let currentIndex = 0;
+
+            while (flames.length > 1) {
+                const strikeIndex = (currentIndex + remainingCount - 1) % flames.length;
+                flames.splice(strikeIndex, 1); // Remove the letter
+                currentIndex = strikeIndex % flames.length; // Update current index for next round
+                 // Ensure currentIndex doesn't go out of bounds if last element was removed
+                if (currentIndex >= flames.length) {
+                     currentIndex = 0;
+                }
+            }
+
+            return flames[0]; // The last remaining letter
+        }
+
+        function displayResult(letter) {
+            const result = flamesMeaning[letter];
+            if (result) {
+                resultText.textContent = result.title;
+                resultDescription.textContent = result.description;
+                resultArea.classList.add('show'); // Add class to trigger animation/display
+            } else {
+                // Fallback if something unexpected happens
+                resultText.textContent = "Hmm...";
+                resultDescription.textContent = "Something went slightly unexpectedly. Try again!";
+                resultArea.classList.add('show');
+            }
+             // Scroll smoothly to the result area if it's off-screen
+            resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideResult() {
+             resultArea.classList.remove('show');
+            // We need to wait for the transition to finish before setting display: none
+            // A simple timeout works here, duration should match CSS transition duration
+             setTimeout(() => {
+                // Check if it still has the 'show' class (in case user submitted again quickly)
+                if (!resultArea.classList.contains('show')) {
+                     // resultArea.style.display = 'none'; // Re-hide completely - Handled by CSS now
+                }
+             }, 800); // Match the transition duration in CSS (0.8s)
+
+        }
+
+        // Initial focus on the first name input
+        name1Input.focus();
+
+    </script>
+
+</body>
+</html>
