@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLAMES - Find Your Spark ✨</title>
-    <!-- Added Favicon -->
+    <title>FLAMES - Visual Calculator ✨</title>
     <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29.6'><path fill='%23ff69b4' d='M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2 c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,19 +21,14 @@
             --container-bg: rgba(255, 255, 255, 0.9);
             --shadow-color: rgba(0, 0, 0, 0.1);
             --error-color: #d9534f;
+            --strike-color: #aaa;
 
             --font-heading: 'Pacifico', cursive;
             --font-body: 'Poppins', sans-serif;
         }
 
         /* --- Base Styles & Reset --- */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font-body);
@@ -42,10 +36,10 @@
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align top for scroll */
             min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+            padding: 30px 20px; /* More padding */
+            overflow-x: hidden;
         }
 
         /* --- Main Container --- */
@@ -55,241 +49,117 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px var(--shadow-color);
             text-align: center;
-            max-width: 500px;
+            max-width: 550px; /* Slightly wider */
             width: 100%;
             transition: transform 0.3s ease-out;
         }
-
-        .container:hover {
-            transform: translateY(-5px); /* Subtle lift on hover */
-        }
+        .container:hover { transform: translateY(-5px); }
 
         /* --- Typography --- */
         h1 {
             font-family: var(--font-heading);
             color: var(--primary-color);
-            font-size: 2.8rem; /* Responsive font size */
+            font-size: 2.8rem;
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px var(--accent-color);
         }
-
-        p {
-            color: #555;
-            margin-bottom: 30px;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
+        p { color: #555; margin-bottom: 30px; font-size: 1rem; line-height: 1.6; }
 
         /* --- Form Styles --- */
-        .flames-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px; /* Spacing between form elements */
-        }
-
-        .input-group {
-            position: relative;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--secondary-color);
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .name-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: var(--font-body);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .name-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2); /* Hot Pink glow */
-        }
-
-        .name-input::placeholder {
-            color: #aaa;
-            font-style: italic;
-        }
+        .flames-form { display: flex; flex-direction: column; gap: 20px; }
+        .input-group { position: relative; }
+        .input-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--secondary-color); text-align: left; font-size: 0.9rem; }
+        .name-input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: var(--font-body); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .name-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2); }
+        .name-input::placeholder { color: #aaa; font-style: italic; }
 
         /* --- Button Styles --- */
-        .submit-btn, .reset-btn {
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            font-family: var(--font-body);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 10px;
-        }
-
-        .submit-btn {
-            background-color: var(--primary-color);
-            color: var(--light-text-color);
-            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.4);
-        }
-
-        .submit-btn:hover {
-            background-color: #ff85c1; /* Slightly lighter pink */
-            transform: translateY(-2px);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        .reset-btn {
-            background-color: var(--accent-color);
-            color: var(--text-color);
-            margin-top: 15px; /* Add space above reset button */
-        }
-
-        .reset-btn:hover {
-            background-color: #ffcdd5;
-            transform: translateY(-2px);
-        }
-
-        .reset-btn:active {
-            transform: translateY(0);
-        }
-
-
-        /* --- Result Area Styles --- */
-        .result-area {
-            margin-top: 30px;
-            padding: 25px;
-            background: var(--accent-color); /* Light pink background for contrast */
-            border-radius: 10px;
-            border: 1px solid var(--primary-color);
-            opacity: 0; /* Initially hidden */
-            transform: translateY(10px); /* Start slightly lower */
-            /* Faster Transition */
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-            display: none; /* Use display none initially */
-        }
-
-        .result-area.show {
-            display: block; /* Make it visible */
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #result-text {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        #result-description {
-            font-size: 1.1rem;
-            color: #444; /* Darker text for readability on light bg */
-            margin-bottom: 20px;
-        }
-
-        /* --- Heart Icon & Animation --- */
-        .heart-icon {
-            width: 50px;
-            height: auto;
-            fill: var(--primary-color); /* Heart color */
-            margin-bottom: 15px;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
+        .submit-btn, .reset-btn { padding: 12px 25px; font-size: 1.1rem; font-weight: 600; font-family: var(--font-body); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; margin-top: 10px; }
+        .submit-btn { background-color: var(--primary-color); color: var(--light-text-color); box-shadow: 0 4px 10px rgba(255, 105, 180, 0.4); }
+        .submit-btn:hover { background-color: #ff85c1; transform: translateY(-2px); }
+        .submit-btn:active { transform: translateY(0); }
+        .reset-btn { background-color: var(--accent-color); color: var(--text-color); margin-top: 15px; }
+        .reset-btn:hover { background-color: #ffcdd5; transform: translateY(-2px); }
+        .reset-btn:active { transform: translateY(0); }
 
         /* --- Error Message Style --- */
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
-            margin-top: -10px; /* Position closer to the input */
-            margin-bottom: 10px;
-            text-align: left;
-            display: none; /* Hidden by default */
-            font-weight: 600;
-        }
+        .error-message { color: var(--error-color); font-size: 0.9rem; margin-top: -10px; margin-bottom: 10px; text-align: left; display: none; font-weight: 600; }
 
-        /* --- Added Loading Indicator Styles --- */
-        #loadingIndicator {
-            display: none; /* Hidden by default */
+        /* --- Calculation Steps Visualization Area --- */
+        #calculationSteps {
             margin-top: 30px;
-            font-size: 1.2rem;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px dashed var(--secondary-color);
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1rem;
+            line-height: 1.8;
+            display: none; /* Hidden initially */
+            overflow-wrap: break-word; /* Wrap long names/words */
+        }
+        #calculationSteps h3 {
+            font-size: 1.1rem;
             color: var(--secondary-color);
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+        .step-section { margin-bottom: 15px; }
+        .name-display-area span, .flames-display-area span {
+            display: inline-block; /* Allows spacing and effects */
+            min-width: 15px; /* Ensure space for single letters */
+            text-align: center;
+            margin: 0 1px;
+            padding: 2px 3px;
+            border-radius: 3px;
+            transition: all 0.3s ease-in-out;
             font-weight: 600;
         }
-        #loadingIndicator span {
-            animation: blink 1.4s infinite both;
+        .name-display-area span.struck, .flames-display-area span.struck {
+            text-decoration: line-through;
+            color: var(--strike-color);
+            opacity: 0.6;
+            background-color: transparent !important; /* Override highlight */
         }
-        #loadingIndicator span:nth-child(2) {
-            animation-delay: 0.2s;
+        .name-display-area span.highlight, .flames-display-area span.highlight {
+            background-color: var(--accent-color);
+            transform: scale(1.1);
         }
-        #loadingIndicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        @keyframes blink {
-            0%, 80%, 100% { opacity: 0; }
-            40% { opacity: 1; }
-        }
+        #countDisplay { font-weight: bold; color: var(--primary-color); font-size: 1.2rem; margin-left: 10px; }
+        #flamesResultLetter { font-weight: bold; color: var(--primary-color); font-size: 1.2rem; margin-left: 10px; }
+
+        /* --- Result Area Styles (No Design Change) --- */
+        .result-area { margin-top: 30px; padding: 25px; background: var(--accent-color); border-radius: 10px; border: 1px solid var(--primary-color); opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease-out, transform 0.3s ease-out; display: none; }
+        .result-area.show { display: block; opacity: 1; transform: translateY(0); }
+        #result-text { font-size: 1.8rem; font-weight: 600; color: var(--primary-color); margin-bottom: 10px; }
+        #result-description { font-size: 1.1rem; color: #444; margin-bottom: 20px; }
+        .heart-icon { width: 50px; height: auto; fill: var(--primary-color); margin-bottom: 15px; animation: pulse 1.5s infinite ease-in-out; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
         /* --- Footer --- */
-        .footer {
-            margin-top: 40px;
-            font-size: 0.8rem;
-            color: #888;
-        }
-        .footer a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 600; /* Make the link slightly bolder */
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
+        .footer { margin-top: 40px; font-size: 0.8rem; color: #888; }
+        .footer a { color: var(--secondary-color); text-decoration: none; font-weight: 600; }
+        .footer a:hover { text-decoration: underline; }
 
         /* --- Responsive Adjustments --- */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            .container {
-                padding: 30px 20px;
-            }
-            #result-text {
-                font-size: 1.5rem;
-            }
-            #result-description {
-                font-size: 1rem;
-            }
-             #loadingIndicator {
-                 font-size: 1rem;
-             }
-            .footer {
-                 font-size: 0.75rem; /* Slightly smaller footer on mobile */
-            }
+            body { padding: 20px 15px; }
+            .container { padding: 30px 20px; }
+            h1 { font-size: 2.2rem; }
+            #result-text { font-size: 1.5rem; }
+            #result-description { font-size: 1rem; }
+            #calculationSteps { font-size: 0.9rem; padding: 15px; }
+            #calculationSteps h3 { font-size: 1rem; }
+            .footer { font-size: 0.75rem; }
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>FLAMES</h1>
-        <p>Curious about your connection? Enter two names below and let destiny decide!</p>
+        <p>See the sparks fly! Enter two names and watch the FLAMES calculation unfold.</p>
 
         <form id="flamesForm" class="flames-form">
             <div class="input-group">
@@ -305,14 +175,29 @@
                  <div id="error-same-name" class="error-message">Names should be different.</div>
             </div>
 
-            <button type="submit" class="submit-btn">Find Your Spark ✨</button>
+            <button type="submit" class="submit-btn">Visualize FLAMES ✨</button>
         </form>
 
-        <!-- Added Loading Indicator Element -->
-        <div id="loadingIndicator">Calculating<span>.</span><span>.</span><span>.</span></div>
+        <!-- Added Calculation Steps Visualization Area -->
+        <div id="calculationSteps">
+            <h3>Calculation Steps:</h3>
+            <div class="step-section name-step">
+                <p><strong>Names:</strong></p>
+                <div id="name1Display" class="name-display-area"></div>
+                <div id="name2Display" class="name-display-area"></div>
+            </div>
+             <div class="step-section count-step" style="display: none;">
+                 <p><strong>Remaining Letter Count:</strong><span id="countDisplay"></span></p>
+             </div>
+            <div class="step-section flames-step" style="display: none;">
+                <p><strong>FLAMES Process:</strong></p>
+                <div id="flamesDisplay" class="flames-display-area"></div>
+                 <p style="margin-top: 10px;"><strong>Final Letter:</strong><span id="flamesResultLetter">?</span></p>
+            </div>
+        </div>
 
+        <!-- Existing Result Area -->
         <div id="resultArea" class="result-area">
-            <!-- Embedded SVG Heart -->
             <svg class="heart-icon" viewBox="0 0 32 29.6">
               <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2 c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
             </svg>
@@ -321,13 +206,12 @@
             <button id="resetButton" class="reset-btn">Try Again?</button>
         </div>
 
-        <!-- == MODIFIED FOOTER START == -->
+        <!-- Footer -->
         <footer class="footer">
             Made with <span style="color: var(--primary-color);">❤</span> for fun by
-            <a href="https://www.instagram.com/hai_faizul/" target="_blank" rel="noopener noreferrer">Faizul Hai</a> with Gemini 2.5 PRO.
+            <a href="https://www.instagram.com/hai_faizul/" target="_blank" rel="noopener noreferrer">Faizul Hai</a>.
             Remember, it's just a game!
         </footer>
-        <!-- == MODIFIED FOOTER END == -->
     </div>
 
     <script>
@@ -341,7 +225,17 @@
         const errorName1 = document.getElementById('error-name1');
         const errorName2 = document.getElementById('error-name2');
         const errorSameName = document.getElementById('error-same-name');
-        const loadingIndicator = document.getElementById('loadingIndicator'); // Get loader element
+
+        // Visualization Elements
+        const calculationStepsDiv = document.getElementById('calculationSteps');
+        const name1Display = document.getElementById('name1Display');
+        const name2Display = document.getElementById('name2Display');
+        const countStepDiv = calculationStepsDiv.querySelector('.count-step');
+        const countDisplay = document.getElementById('countDisplay');
+        const flamesStepDiv = calculationStepsDiv.querySelector('.flames-step');
+        const flamesDisplay = document.getElementById('flamesDisplay');
+        const flamesResultLetterDisplay = document.getElementById('flamesResultLetter');
+
 
         const flamesMeaning = {
             F: { title: "Friends", description: "A bond of camaraderie and support. You're pals!" },
@@ -352,131 +246,187 @@
             S: { title: "Siblings", description: "A close, familiar bond, like family. You look out for each other." }
         };
 
-        flamesForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent actual form submission
+        // Helper function for delays
+        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-            // Reset previous state
+        // Function to send data to Google Sheet
+        async function sendDataToSheet(name1, name2, flamesResult) {
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4_BBAcsQxDuMJxStheSYkRELXZ269S22yNnf7VxX9ypB1VxDwERW7QyEUABNitKc5/exec"; // YOUR URL
+
+            const dataToSend = {
+                name1: name1,
+                name2: name2,
+                flamesResult: flamesResult
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    credentials: 'omit',
+                    headers: { 'Content-Type': 'application/json' },
+                    redirect: 'follow',
+                    body: JSON.stringify(dataToSend)
+                });
+                const responseData = await response.json();
+                console.log("Data sent to sheet:", responseData);
+            } catch (error) {
+                console.error("Error sending data to sheet:", error);
+            }
+        }
+
+
+        flamesForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
             hideResult();
             hideError(errorName1);
             hideError(errorName2);
             hideError(errorSameName);
-            loadingIndicator.style.display = 'none'; // Hide loader initially
-            name1Input.style.borderColor = '#ddd'; // Reset border
-            name2Input.style.borderColor = '#ddd'; // Reset border
+            calculationStepsDiv.style.display = 'none';
+            name1Display.innerHTML = '';
+            name2Display.innerHTML = '';
+            flamesDisplay.innerHTML = '';
+            countStepDiv.style.display = 'none';
+            flamesStepDiv.style.display = 'none';
+            flamesResultLetterDisplay.textContent = '?';
+            name1Input.style.borderColor = '#ddd';
+            name2Input.style.borderColor = '#ddd';
 
             const rawName1 = name1Input.value.trim();
             const rawName2 = name2Input.value.trim();
 
-            // --- Input Validation ---
             let isValid = true;
-            if (!rawName1) {
-                showError(errorName1, 'Please enter the first name.');
-                name1Input.style.borderColor = 'var(--error-color)';
-                isValid = false;
-            }
-            if (!rawName2) {
-                showError(errorName2, 'Please enter the second name.');
-                 name2Input.style.borderColor = 'var(--error-color)';
-                isValid = false;
-            }
-            if (rawName1 && rawName2 && rawName1.toLowerCase() === rawName2.toLowerCase()) {
-                showError(errorSameName, 'Names should be different for a fun result!');
-                name1Input.style.borderColor = 'var(--error-color)';
-                name2Input.style.borderColor = 'var(--error-color)';
-                isValid = false;
-            }
+            if (!rawName1) { showError(errorName1, 'Please enter the first name.'); name1Input.style.borderColor = 'var(--error-color)'; isValid = false; }
+            if (!rawName2) { showError(errorName2, 'Please enter the second name.'); name2Input.style.borderColor = 'var(--error-color)'; isValid = false; }
+            if (rawName1 && rawName2 && rawName1.toLowerCase() === rawName2.toLowerCase()) { showError(errorSameName, 'Names should be different for a fun result!'); name1Input.style.borderColor = 'var(--error-color)'; name2Input.style.borderColor = 'var(--error-color)'; isValid = false; }
+            if (!isValid) return;
 
-            if (!isValid) {
-                 return; // Stop processing if validation fails
+            calculationStepsDiv.style.display = 'block';
+            calculationStepsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Run visualization, which will also display the final result card
+            // and return the calculated final letter
+            const finalLetterCalculated = await runCalculationVisualization(rawName1, rawName2);
+
+            // Send data after visualization and calculation are complete
+            if (finalLetterCalculated) { // Ensure we have a letter to send
+                sendDataToSheet(rawName1, rawName2, finalLetterCalculated);
             }
-
-            // --- Show Loading Animation & Calculate/Display ---
-            loadingIndicator.style.display = 'block'; // Show loader
-
-            // Use setTimeout to simulate calculation time and show loader
-            setTimeout(() => {
-                const resultLetter = calculateFlames(rawName1, rawName2);
-                loadingIndicator.style.display = 'none'; // Hide loader
-                displayResult(resultLetter); // Display final result
-            }, 750); // Wait 750ms before showing result
-
         });
 
         resetButton.addEventListener('click', function() {
             name1Input.value = '';
             name2Input.value = '';
             hideResult();
-            loadingIndicator.style.display = 'none'; // Hide loader on reset
-             // Reset errors and borders
+            calculationStepsDiv.style.display = 'none';
             hideError(errorName1);
             hideError(errorName2);
             hideError(errorSameName);
             name1Input.style.borderColor = '#ddd';
             name2Input.style.borderColor = '#ddd';
-            name1Input.focus(); // Focus on the first input for convenience
+            name1Input.focus();
         });
 
-        function showError(element, message) {
-            element.textContent = message;
-            element.style.display = 'block';
-        }
+        function showError(element, message) { element.textContent = message; element.style.display = 'block'; }
+        function hideError(element) { element.style.display = 'none'; }
 
-        function hideError(element) {
-            element.style.display = 'none';
-        }
+        async function runCalculationVisualization(name1, name2) {
+            const cleanName1 = name1.toLowerCase().replace(/[^a-z]/g, '');
+            const cleanName2 = name2.toLowerCase().replace(/[^a-z]/g, '');
 
+            displayNamesWithSpans(cleanName1, name1Display);
+            displayNamesWithSpans(cleanName2, name2Display);
+            await sleep(500);
 
-        function calculateFlames(name1, name2) {
-            // 1. Prepare names: lowercase, remove spaces and non-alphabetic chars
-            let cleanName1 = name1.toLowerCase().replace(/[^a-z]/g, '');
-            let cleanName2 = name2.toLowerCase().replace(/[^a-z]/g, '');
-
-            // Use frequency maps for efficient character counting and removal
             const freq1 = {};
             const freq2 = {};
-
-            for (const char of cleanName1) {
-                freq1[char] = (freq1[char] || 0) + 1;
-            }
-            for (const char of cleanName2) {
-                freq2[char] = (freq2[char] || 0) + 1;
-            }
+            for (const char of cleanName1) freq1[char] = (freq1[char] || 0) + 1;
+            for (const char of cleanName2) freq2[char] = (freq2[char] || 0) + 1;
 
             let commonCount = 0;
+            const name1Spans = Array.from(name1Display.children);
+            const name2Spans = Array.from(name2Display.children);
+
             for (const char in freq1) {
                 if (freq2[char]) {
-                    commonCount += Math.min(freq1[char], freq2[char]);
+                    const countToRemove = Math.min(freq1[char], freq2[char]);
+                    // commonCount += countToRemove; // commonCount is for calculation, not directly for striking name letters
+
+                    for (let i = 0; i < countToRemove; i++) {
+                        const span1Index = name1Spans.findIndex(span => !span.classList.contains('struck') && span.textContent === char);
+                        const span2Index = name2Spans.findIndex(span => !span.classList.contains('struck') && span.textContent === char);
+
+                        if (span1Index !== -1 && span2Index !== -1) {
+                            name1Spans[span1Index].classList.add('highlight');
+                            name2Spans[span2Index].classList.add('highlight');
+                            await sleep(150);
+                            name1Spans[span1Index].classList.remove('highlight');
+                            name2Spans[span2Index].classList.remove('highlight');
+                            name1Spans[span1Index].classList.add('struck');
+                            name2Spans[span2Index].classList.add('struck');
+                            commonCount++; // Increment commonCount for each pair struck visually
+                            await sleep(100);
+                        } else {
+                           break;
+                        }
+                    }
                 }
             }
+            await sleep(500);
 
             const totalLength = cleanName1.length + cleanName2.length;
-            const remainingCount = totalLength - (2 * commonCount);
+            const remainingCount = Math.max(1, totalLength - (2 * commonCount));
+            countDisplay.textContent = remainingCount;
+            countStepDiv.style.display = 'block';
+            await sleep(500);
 
-            // Handle edge case where names might become identical after cleaning or have no remainder
-            if (remainingCount <= 0) {
-                 // Return a default or random value if count is 0 or less
-                 // Let's default to 'F' for Friends in this edge case
-                 console.warn("FLAMES count resulted in 0 or less. Defaulting to 'F'. Input names:", name1, name2);
-                 return 'F';
-            }
+            flamesStepDiv.style.display = 'block';
+            const flamesLetters = ['F', 'L', 'A', 'M', 'E', 'S'];
+            displayNamesWithSpans(flamesLetters.join(''), flamesDisplay);
 
-            // 2. FLAMES striking logic
-            let flames = ['F', 'L', 'A', 'M', 'E', 'S'];
-            let currentIndex = 0;
+            let currentFlamesSpans = Array.from(flamesDisplay.children);
+            let currentIndexInUI = 0; // For visual striking logic based on current available spans
 
-            while (flames.length > 1) {
-                // Ensure remainingCount is positive before modulo
-                const safeRemainingCount = Math.max(1, remainingCount);
-                const strikeIndex = (currentIndex + safeRemainingCount - 1) % flames.length;
-                flames.splice(strikeIndex, 1); // Remove the letter
-                currentIndex = strikeIndex % flames.length; // Update current index for next round
-                 // Ensure currentIndex doesn't go out of bounds if last element was removed
-                if (currentIndex >= flames.length) {
-                     currentIndex = 0;
+            while (currentFlamesSpans.filter(span => !span.classList.contains('struck')).length > 1) {
+                const availableSpans = currentFlamesSpans.filter(span => !span.classList.contains('struck'));
+                if (availableSpans.length === 0) break;
+
+                const strikeIndexInAvailable = (currentIndexInUI + remainingCount - 1) % availableSpans.length;
+                const spanToStrike = availableSpans[strikeIndexInAvailable];
+
+                spanToStrike.classList.add('highlight');
+                await sleep(400);
+                spanToStrike.classList.remove('highlight');
+                spanToStrike.classList.add('struck');
+                await sleep(350);
+                
+                // Update currentIndexInUI to the position of the struck item in the *available* list
+                // for the next round, to simulate circular counting on remaining items
+                currentIndexInUI = strikeIndexInAvailable % availableSpans.filter(span => !span.classList.contains('struck')).length;
+                if(availableSpans.filter(span => !span.classList.contains('struck')).length === 0) {
+                    currentIndexInUI = 0; // Reset if all struck (shouldn't happen if loop condition is correct)
                 }
             }
 
-             return flames[0] || 'S'; // The last remaining letter, fallback to 'S' if empty
+            const finalSpan = currentFlamesSpans.find(span => !span.classList.contains('struck'));
+            const finalLetter = finalSpan ? finalSpan.textContent : 'S';
+            flamesResultLetterDisplay.textContent = finalLetter;
+            flamesResultLetterDisplay.classList.add('highlight');
+            await sleep(1000);
+
+            displayResult(finalLetter); // Display the final result card
+            return finalLetter; // Return the calculated letter for data sending
+        }
+
+        function displayNamesWithSpans(name, displayElement) {
+            displayElement.innerHTML = '';
+            for (const char of name) {
+                const span = document.createElement('span');
+                span.textContent = char;
+                displayElement.appendChild(span);
+            }
         }
 
         function displayResult(letter) {
@@ -484,32 +434,22 @@
             if (result) {
                 resultText.textContent = result.title;
                 resultDescription.textContent = result.description;
-                resultArea.classList.add('show'); // Add class to trigger animation/display
             } else {
-                // Fallback if something unexpected happens
                 resultText.textContent = "Hmm...";
                 resultDescription.textContent = "Something went slightly unexpectedly. Try again!";
-                resultArea.classList.add('show');
             }
-             // Scroll smoothly to the result area if it's off-screen
+             resultArea.classList.add('show');
             resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function hideResult() {
              resultArea.classList.remove('show');
-            // Wait for the FASTER transition (0.3s)
              setTimeout(() => {
-                // Check if it still has the 'show' class (in case user submitted again quickly)
-                if (!resultArea.classList.contains('show')) {
-                     // display: none is handled by the absence of 'show' class now in CSS
-                }
-             }, 300); // Match the NEW transition duration in CSS (0.3s)
-
+                if (!resultArea.classList.contains('show')) { /* No action needed */ }
+             }, 300);
         }
 
-        // Initial focus on the first name input
         name1Input.focus();
-
     </script>
 
 </body>
