@@ -34,7 +34,7 @@
             font-family: var(--font-body); background: var(--bg-gradient); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; overflow-x: hidden; 
         }
         .main-content-wrapper { width: 100%; max-width: 500px; margin: auto; position: relative; }
-        .container { background: var(--container-bg); padding: 40px 30px; border-radius: 15px; box-shadow: 0 10px 30px var(--shadow-color); text-align: center; width: 100%; transition: transform 0.3s ease-out; }
+        .container { background: var(--container-bg); padding: 40px 30px 30px 30px; border-radius: 15px; box-shadow: 0 10px 30px var(--shadow-color); text-align: center; width: 100%; transition: transform 0.3s ease-out; }
         .container:hover { transform: translateY(-5px); }
         h1 { font-family: var(--font-heading); color: var(--primary-color); font-size: 2.8rem; margin-bottom: 10px; text-shadow: 1px 1px 2px var(--accent-color); }
         p.tagline { color: #555; margin-bottom: 30px; font-size: 1rem; line-height: 1.6; }
@@ -72,9 +72,9 @@
         @keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
         .help-icon { position: absolute; top: 15px; right: 10px; width: 30px; height: 30px; background-color: var(--secondary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background-color 0.3s ease; z-index: 100; }
         .help-icon:hover { background-color: var(--primary-color); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s; z-index: 1000; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s; z-index: 1000; padding: 15px; } 
         .modal-overlay.show { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s linear 0s; }
-        .modal-content { background-color: white; padding: 25px 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 450px; width: 90%; text-align: left; position: relative; transform: scale(0.9); transition: transform 0.3s ease; }
+        .modal-content { background-color: white; padding: 25px 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 450px; width: 100%; text-align: left; position: relative; transform: scale(0.9); transition: transform 0.3s ease; overflow-y: auto; max-height: 85vh; }
         .modal-overlay.show .modal-content { transform: scale(1); }
         .modal-content h2 { font-family: var(--font-heading); color: var(--primary-color); margin-top: 0; margin-bottom: 15px; font-size: 1.8rem; }
         .modal-content p { font-size: 0.95rem; line-height: 1.7; margin-bottom: 10px; color: #444; }
@@ -82,16 +82,17 @@
         .modal-content li { margin-bottom: 8px; font-size: 0.95rem; color: #444; }
         .modal-close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.8rem; font-weight: bold; color: #888; background: none; border: none; cursor: pointer; padding: 5px; line-height: 1; }
         .modal-close-btn:hover { color: var(--primary-color); }
-        .footer { margin-top: 40px; font-size: 0.8rem; color: #888; text-align: center; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 0.8rem; color: #888; text-align: center; }
         .footer a { color: var(--secondary-color); text-decoration: none; font-weight: 600; }
         .footer a:hover { text-decoration: underline; }
 
         @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; } .container { padding: 30px 15px; } .main-content-wrapper { padding-left: 5px; padding-right: 5px; }
+            h1 { font-size: 2.2rem; } .container { padding: 30px 15px 20px 15px; } .main-content-wrapper { padding-left: 5px; padding-right: 5px; }
             #result-text { font-size: 1.5rem; } #result-description { font-size: 1rem; } #loadingIndicator { font-size: 1rem; }
             .help-icon { top: 10px; right: 5px; width: 28px; height: 28px; font-size: 1rem; }
             .modal-content { padding: 20px;} .modal-content h2 { font-size: 1.5rem;}
-            .footer { font-size: 0.75rem; } .share-btn { font-size: 0.9rem; padding: 8px 15px; } .result-buttons { gap: 10px; }
+            .footer { font-size: 0.75rem; margin-top: 25px; padding-top: 15px;} 
+            .share-btn { font-size: 0.9rem; padding: 8px 15px; } .result-buttons { gap: 10px; }
         }
     </style>
 </head>
@@ -124,26 +125,22 @@
                 <svg class="heart-icon" viewBox="0 0 32 29.6"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2 c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>
                 <h2 id="result-text"></h2>
                 <p id="result-description"></p>
-                
-                <!-- Connection Score Area - Corrected -->
                 <div id="connection-score-area">
                     <span style="color: var(--secondary-color);">Connection Score: </span>
                     <span id="connection-score" style="font-size: 1.3em; color: var(--primary-color);"></span>%
                 </div>
-                
-                <!-- Button Wrapper - Corrected -->
                 <div class="result-buttons"> 
                     <button id="shareResultBtn" class="share-btn">Share Results 📤</button>
                     <button id="resetButton" class="reset-btn">Try Again?</button>
                 </div>
             </div>
-        </div> 
 
-        <footer class="footer">
-            Made with <span style="color: var(--primary-color);">❤</span> for fun by
-            <a href="https://www.instagram.com/hai_faizul/" target="_blank" rel="noopener noreferrer">Faizul Hai</a> with Gemini 2.5 PRO.
-            Remember, it's just a game!
-        </footer>
+             <footer class="footer">
+                Made with <span style="color: var(--primary-color);">❤</span> for fun by
+                <a href="https://www.instagram.com/hai_faizul/" target="_blank" rel="noopener noreferrer">Faizul Hai</a> with Gemini 2.5 PRO.
+                Remember, it's just a game!
+            </footer>
+        </div> 
     </div> 
 
     <!-- Modal HTML Structure -->
@@ -158,7 +155,6 @@
     </div>
 
     <script>
-        // --- CONSTANTS and Variable Declarations (No Changes Here) ---
         const flamesForm = document.getElementById('flamesForm');
         const name1Input = document.getElementById('name1');
         const name2Input = document.getElementById('name2');
@@ -179,17 +175,9 @@
         const submitBtn = document.getElementById('submitBtn'); 
 
         let currentShareData = { name1: '', name2: '', title: '', score: 0 };
+        const flamesMeaning = { F: { title: "Friends", description: "A bond of camaraderie and support. You're pals!" }, L: { title: "Lovers", description: "Passionate sparks fly! There's definite romance here." }, A: { title: "Affectionate", description: "A sweet and caring connection, full of fondness." }, M: { title: "Marriage", description: "Could it be wedding bells? Destiny hints at a lifelong union!" }, E: { title: "Enemies", description: "Uh oh! Maybe opposites don't attract in this case..." }, S: { title: "Siblings", description: "A close, familiar bond, like family. You look out for each other." } };
 
-        const flamesMeaning = { 
-             F: { title: "Friends", description: "A bond of camaraderie and support. You're pals!" },
-             L: { title: "Lovers", description: "Passionate sparks fly! There's definite romance here." },
-             A: { title: "Affectionate", description: "A sweet and caring connection, full of fondness." },
-             M: { title: "Marriage", description: "Could it be wedding bells? Destiny hints at a lifelong union!" },
-             E: { title: "Enemies", description: "Uh oh! Maybe opposites don't attract in this case..." },
-             S: { title: "Siblings", description: "A close, familiar bond, like family. You look out for each other." }
-        };
-
-        // --- Help Modal Logic (No Changes Needed) ---
+        // --- Help Modal Logic ---
         if (helpIcon && helpModalOverlay && modalCloseBtn) { 
              helpIcon.addEventListener('click', () => { helpModalOverlay.classList.add('show'); });
              modalCloseBtn.addEventListener('click', () => { helpModalOverlay.classList.remove('show'); });
@@ -197,69 +185,62 @@
              document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && helpModalOverlay.classList.contains('show')) { helpModalOverlay.classList.remove('show'); } });
         } else { console.warn("Help modal elements not found."); }
 
-        // --- Data Submission to Google Form (No Changes Needed) ---
+        // --- Data Submission to Google Form ---
         function getOrCreateSessionId() { 
-             let sessionId = localStorage.getItem('flamesGameSessionId');
-             if (!sessionId) { sessionId = Date.now().toString(36) + Math.random().toString(36).substring(2); localStorage.setItem('flamesGameSessionId', sessionId); }
-             return sessionId;
+             let sessionId = localStorage.getItem('flamesGameSessionId'); if (!sessionId) { sessionId = Date.now().toString(36) + Math.random().toString(36).substring(2); localStorage.setItem('flamesGameSessionId', sessionId); } return sessionId;
         }
-        async function submitToGoogleForm(name1, name2, flamesResult /*, score */) { 
+        
+        // UPDATED: Added 'score' parameter
+        async function submitToGoogleForm(name1, name2, flamesResult, score) { 
             const FORM_RESPONSE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfNinA8kb1qmCWNJElFI-LPmehtul_RRK9kOUkAOHc03ZEFbA/formResponse";
-            const NAME1_ENTRY_ID = "entry.286197816";
-            const NAME2_ENTRY_ID = "entry.1787664536";
-            const RESULT_ENTRY_ID = "entry.1857416710";
+            const NAME1_ENTRY_ID = "entry.286197816"; 
+            const NAME2_ENTRY_ID = "entry.1787664536"; 
+            const RESULT_ENTRY_ID = "entry.1857416710"; 
             const SESSION_ID_ENTRY_ID = "entry.308590061";
-            const SCORE_ENTRY_ID = "entry.1581888635";
+            const SCORE_ENTRY_ID = "entry.1581888635"; // YOUR SCORE ENTRY ID
 
             const sessionId = getOrCreateSessionId(); 
             const formData = new FormData();
-            formData.append(NAME1_ENTRY_ID, name1);
-            formData.append(NAME2_ENTRY_ID, name2);
-            formData.append(RESULT_ENTRY_ID, flamesResult);
+            formData.append(NAME1_ENTRY_ID, name1); 
+            formData.append(NAME2_ENTRY_ID, name2); 
+            formData.append(RESULT_ENTRY_ID, flamesResult); 
             formData.append(SESSION_ID_ENTRY_ID, sessionId);
-            formData.append(SCORE_ENTRY_ID, score);
+            // UPDATED: Append score if it's provided and the ID is set
+            if (score !== undefined && SCORE_ENTRY_ID) { 
+                formData.append(SCORE_ENTRY_ID, score); 
+            }
 
             try { await fetch(FORM_RESPONSE_URL, { method: "POST", mode: "no-cors", body: formData }); console.log("Data submission attempt completed."); } catch (error) { console.error("Error submitting data:", error); }
         }
 
-
-        // --- Event Listeners and Core Logic (Includes Button State) ---
+        // --- Event Listeners and Core Logic ---
         flamesForm.addEventListener('submit', function(event) { 
             event.preventDefault(); 
-            hideResult();
-            hideError(errorName1); hideError(errorName2); hideError(errorSameName);
-            loadingIndicator.style.display = 'none'; 
-            name1Input.style.borderColor = '#ddd'; name2Input.style.borderColor = '#ddd'; 
-
-            const rawName1 = name1Input.value.trim();
-            const rawName2 = name2Input.value.trim();
-
+            hideResult(); hideError(errorName1); hideError(errorName2); hideError(errorSameName);
+            loadingIndicator.style.display = 'none'; name1Input.style.borderColor = '#ddd'; name2Input.style.borderColor = '#ddd'; 
+            const rawName1 = name1Input.value.trim(); const rawName2 = name2Input.value.trim();
             let isValid = true;
             if (!rawName1) { showError(errorName1, 'Please enter Your Name.'); name1Input.style.borderColor = 'var(--error-color)'; isValid = false; }
             if (!rawName2) { showError(errorName2, 'Please enter Partner\'s Name.'); name2Input.style.borderColor = 'var(--error-color)'; isValid = false; }
             if (rawName1 && rawName2 && rawName1.toLowerCase() === rawName2.toLowerCase()) { showError(errorSameName, 'Names should be different.'); name1Input.style.borderColor = 'var(--error-color)'; name2Input.style.borderColor = 'var(--error-color)'; isValid = false; }
             if (!isValid) return;
-
-            currentShareData.name1 = rawName1; 
-            currentShareData.name2 = rawName2;
-
+            currentShareData.name1 = rawName1; currentShareData.name2 = rawName2;
             loadingIndicator.style.display = 'block'; 
             if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Calculating...'; }
-
             setTimeout(() => {
                 const flamesResult = calculateFlames(rawName1, rawName2);                 
                 loadingIndicator.style.display = 'none'; 
                 displayResult(flamesResult); 
                  if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Find Your Spark ✨'; }
                 if (rawName1 && rawName2 && flamesResult.letter) {
-                    submitToGoogleForm(rawName1, rawName2, flamesResult.letter /*, flamesResult.score */); 
+                    // UPDATED: Pass the score to the submission function
+                    submitToGoogleForm(rawName1, rawName2, flamesResult.letter, flamesResult.score); 
                 }
             }, 750); 
         });
 
-        resetButton.addEventListener('click', function() { 
-            name1Input.value = ''; name2Input.value = '';
-            hideResult(); 
+        resetButton.addEventListener('click', function() { /* ... */ 
+            name1Input.value = ''; name2Input.value = ''; hideResult(); 
             loadingIndicator.style.display = 'none'; 
             hideError(errorName1); hideError(errorName2); hideError(errorSameName);
             name1Input.style.borderColor = '#ddd'; name2Input.style.borderColor = '#ddd';
@@ -270,91 +251,57 @@
         function showError(element, message) { element.textContent = message; element.style.display = 'block';}
         function hideError(element) { element.style.display = 'none'; }
 
-        // --- calculateFlames (Includes Improved Scoring Logic) ---
-        function calculateFlames(name1, name2) {
-            let cleanName1 = name1.toLowerCase().replace(/[^a-z]/g, '');
-            let cleanName2 = name2.toLowerCase().replace(/[^a-z]/g, '');
+        // --- calculateFlames (No Changes Needed) ---
+        function calculateFlames(name1, name2) { /* ... (existing scoring logic) ... */ 
+            let cleanName1 = name1.toLowerCase().replace(/[^a-z]/g, ''); let cleanName2 = name2.toLowerCase().replace(/[^a-z]/g, '');
             const freq1 = {}; const freq2 = {};
-            for (const char of cleanName1) { freq1[char] = (freq1[char] || 0) + 1; }
-            for (const char of cleanName2) { freq2[char] = (freq2[char] || 0) + 1; }
-            let commonCount = 0;
-            for (const char in freq1) { if (freq2[char]) { commonCount += Math.min(freq1[char], freq2[char]); } }
-            const totalLength = cleanName1.length + cleanName2.length;
-            const remainingCount = totalLength - (2 * commonCount);
+            for (const char of cleanName1) { freq1[char] = (freq1[char] || 0) + 1; } for (const char of cleanName2) { freq2[char] = (freq2[char] || 0) + 1; }
+            let commonCount = 0; for (const char in freq1) { if (freq2[char]) { commonCount += Math.min(freq1[char], freq2[char]); } }
+            const totalLength = cleanName1.length + cleanName2.length; const remainingCount = totalLength - (2 * commonCount);
             let finalLetter = 'F'; let connectionScore = 40; 
             if (remainingCount > 0) {
                 let flames = ['F', 'L', 'A', 'M', 'E', 'S']; let currentIndex = 0;
-                while (flames.length > 1) {
-                    const safeRemainingCount = Math.max(1, remainingCount);
-                    const strikeIndex = (currentIndex + safeRemainingCount - 1) % flames.length;
-                    flames.splice(strikeIndex, 1);
-                    currentIndex = strikeIndex % flames.length;
-                    if (currentIndex >= flames.length) { currentIndex = 0; }
-                }
+                while (flames.length > 1) { const safeRemainingCount = Math.max(1, remainingCount); const strikeIndex = (currentIndex + safeRemainingCount - 1) % flames.length; flames.splice(strikeIndex, 1); currentIndex = strikeIndex % flames.length; if (currentIndex >= flames.length) { currentIndex = 0; } }
                 finalLetter = flames[0] || 'S'; 
                 const variability = (remainingCount % 10); 
                 switch (finalLetter) {
-                    case 'L': connectionScore = 88 + variability; break; 
-                    case 'M': connectionScore = 90 + variability; break; 
-                    case 'A': connectionScore = 75 + variability * 1.5; break; 
-                    case 'F': connectionScore = 60 + variability * 1.5; break; 
-                    case 'S': connectionScore = 40 + variability * 2;   break; 
-                    case 'E': connectionScore = 10 + variability * 2;   break; 
-                    default: connectionScore = 50 + variability; 
+                    case 'L': connectionScore = 88 + variability; break; case 'M': connectionScore = 90 + variability; break; case 'A': connectionScore = 75 + variability * 1.5; break; case 'F': connectionScore = 60 + variability * 1.5; break; case 'S': connectionScore = 40 + variability * 2; break; case 'E': connectionScore = 10 + variability * 2; break; default: connectionScore = 50 + variability; 
                 }
                 connectionScore = Math.max(1, Math.min(99, Math.round(connectionScore))); 
             } else { console.warn("FLAMES count <= 0. Defaulting.", name1, name2); }
             return { letter: finalLetter, score: connectionScore }; 
         }
 
-        // --- displayResult (Includes Score, Share Button, Theming) ---
-        function displayResult(resultData) { 
-            const resultMeaning = flamesMeaning[resultData.letter];
-            currentShareData.title = resultMeaning ? resultMeaning.title : 'Unknown';
-            currentShareData.score = resultData.score;
+        // --- displayResult (No Changes Needed) ---
+        function displayResult(resultData) { /* ... */ 
+            const resultMeaning = flamesMeaning[resultData.letter]; currentShareData.title = resultMeaning ? resultMeaning.title : 'Unknown'; currentShareData.score = resultData.score;
             resultArea.classList.remove('result-F', 'result-L', 'result-A', 'result-M', 'result-E', 'result-S'); 
             if (resultMeaning) { resultArea.classList.add(`result-${resultData.letter}`); }
-
             if (resultMeaning && scoreDisplay && scoreArea && shareBtn) {
-                resultText.textContent = resultMeaning.title;
-                resultDescription.textContent = resultMeaning.description;
-                scoreDisplay.textContent = resultData.score; 
-                scoreArea.style.display = 'block'; 
-                shareBtn.style.display = 'inline-block'; 
-                shareBtn.textContent = 'Share Results 📤'; 
-                shareBtn.classList.remove('copied'); 
+                resultText.textContent = resultMeaning.title; resultDescription.textContent = resultMeaning.description; scoreDisplay.textContent = resultData.score; 
+                scoreArea.style.display = 'block'; shareBtn.style.display = 'inline-block'; shareBtn.textContent = 'Share Results 📤'; shareBtn.classList.remove('copied'); 
                 resultArea.classList.add('show');
             } else {
-                resultText.textContent = "Hmm...";
-                resultDescription.textContent = "Something went slightly unexpectedly. Try again!";
-                 if(scoreArea) scoreArea.style.display = 'none'; 
-                 if(shareBtn) shareBtn.style.display = 'none'; 
+                resultText.textContent = "Hmm..."; resultDescription.textContent = "Something went slightly unexpectedly.";
+                 if(scoreArea) scoreArea.style.display = 'none'; if(shareBtn) shareBtn.style.display = 'none'; 
                  resultArea.classList.remove('result-F', 'result-L', 'result-A', 'result-M', 'result-E', 'result-S'); 
                 resultArea.classList.add('show');
             }
             resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // --- hideResult (Hides score + share + resets theme) ---
-        function hideResult() {
-            resultArea.classList.remove('show');
-             if (scoreArea) { scoreArea.style.display = 'none'; }
-             if (shareBtn) { shareBtn.style.display = 'none'; } 
-             resultArea.classList.remove('result-F', 'result-L', 'result-A', 'result-M', 'result-E', 'result-S'); 
-             setTimeout(() => { if (!resultArea.classList.contains('show')) {} }, 300);
+        // --- hideResult (No Changes Needed) ---
+        function hideResult() { /* ... */ 
+            resultArea.classList.remove('show'); if (scoreArea) { scoreArea.style.display = 'none'; } if (shareBtn) { shareBtn.style.display = 'none'; } 
+            resultArea.classList.remove('result-F', 'result-L', 'result-A', 'result-M', 'result-E', 'result-S'); 
+            setTimeout(() => { if (!resultArea.classList.contains('show')) {} }, 300);
         }
 
-        // --- Share Button Logic (Includes Improved Message) ---
-        if(shareBtn) {
+        // --- Share Button Logic (No Changes Needed) ---
+        if(shareBtn) { /* ... */ 
             shareBtn.addEventListener('click', () => {
-                const siteUrl = window.location.href; 
-                const shareText = `Destiny hints at ${currentShareData.title} for ${currentShareData.name1} & ${currentShareData.name2}! 💖 Our Connection Score is ${currentShareData.score}%. ✨ See what FLAMES predicts for you: ${siteUrl}`;
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(shareText).then(() => {
-                        shareBtn.textContent = 'Copied! 👍'; shareBtn.classList.add('copied');
-                        setTimeout(() => { shareBtn.textContent = 'Share Results 📤'; shareBtn.classList.remove('copied'); }, 2000); 
-                    }).catch(err => { console.error('Failed to copy results: ', err); alert('Failed to copy results.'); });
-                } else { alert('Clipboard API not available.'); }
+                const siteUrl = window.location.href; const shareText = `Destiny hints at ${currentShareData.title} for ${currentShareData.name1} & ${currentShareData.name2}! 💖 Our Connection Score is ${currentShareData.score}%. ✨ See what FLAMES predicts for you: ${siteUrl}`;
+                if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(shareText).then(() => { shareBtn.textContent = 'Copied! 👍'; shareBtn.classList.add('copied'); setTimeout(() => { shareBtn.textContent = 'Share Results 📤'; shareBtn.classList.remove('copied'); }, 2000); }).catch(err => { console.error('Failed to copy results: ', err); alert('Failed to copy results.'); }); } else { alert('Clipboard API not available.'); }
             });
         }
         
