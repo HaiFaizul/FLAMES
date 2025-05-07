@@ -174,7 +174,6 @@
             border: 1px solid var(--primary-color);
             opacity: 0; /* Initially hidden */
             transform: translateY(10px); /* Start slightly lower */
-            /* Faster Transition */
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
             display: none; /* Use display none initially */
         }
@@ -352,30 +351,29 @@
             S: { title: "Siblings", description: "A close, familiar bond, like family. You look out for each other." }
         };
 
-        // Function to send data to Google Sheet
-        async function sendDataToSheet(name1, name2, flamesResult) {
-            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyr3E5R_rMkOs36mKIMQwTRky3zbRhWdMA8a2exuaQR3r58tMp61bMA7YZ4FUlzEH0/exec"; // YOUR SCRIPT URL
+        // Function to submit data to Google Form
+        async function submitToGoogleForm(name1, name2, flamesResult) {
+            const FORM_RESPONSE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfNinA8kb1qmCWNJElFI-LPmehtul_RRK9kOUkAOHc03ZEFbA/formResponse";
+            const NAME1_ENTRY_ID = "entry.286197816";
+            const NAME2_ENTRY_ID = "entry.1787664536";
+            const RESULT_ENTRY_ID = "entry.1857416710";
 
-            const dataToSend = {
-                name1: name1,
-                name2: name2,
-                flamesResult: flamesResult
-            };
+            const formData = new FormData();
+            formData.append(NAME1_ENTRY_ID, name1);
+            formData.append(NAME2_ENTRY_ID, name2);
+            formData.append(RESULT_ENTRY_ID, flamesResult);
 
             try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    credentials: 'omit',
-                    headers: { 'Content-Type': 'application/json' },
-                    redirect: 'follow',
-                    body: JSON.stringify(dataToSend)
+                await fetch(FORM_RESPONSE_URL, {
+                    method: "POST",
+                    mode: "no-cors", // Important for submitting to Google Forms this way
+                    body: formData,
                 });
-                const responseData = await response.json();
-                console.log("Data sent to sheet:", responseData);
+                console.log("Data submission attempt to Google Form completed (no direct response expected with no-cors). Check your Google Sheet.");
             } catch (error) {
-                console.error("Error sending data to sheet:", error);
+                // This catch block might not be triggered for network errors with no-cors
+                // but it's good to have for other potential issues with the fetch setup itself.
+                console.error("Error attempting to submit data to Google Form:", error);
             }
         }
 
@@ -427,9 +425,9 @@
                 loadingIndicator.style.display = 'none'; // Hide loader
                 displayResult(resultLetter); // Display final result
 
-                // Send data to Google Sheet
+                // Send data to Google Form
                 if (rawName1 && rawName2 && resultLetter) { // Ensure we have data to send
-                    sendDataToSheet(rawName1, rawName2, resultLetter);
+                    submitToGoogleForm(rawName1, rawName2, resultLetter);
                 }
 
             }, 750); // Wait 750ms before showing result
