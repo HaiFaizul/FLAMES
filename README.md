@@ -2,7 +2,7 @@
 
 A fun, interactive, and visually animated web application to calculate the FLAMES relationship compatibility between two names. This single-page HTML application uses modern CSS for styling and vanilla JavaScript for the logic and animations.
 
-**Live Demo:** [https://your-username.github.io/FLAMES.html](https://your-username.github.io/FLAMES.html)
+**Live Demo:** [https://haifaizul.github.io/FLAMES/](https://haifaizul.github.io/FLAMES/)
 
 ## What is FLAMES? 🔥
 
