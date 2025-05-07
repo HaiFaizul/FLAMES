@@ -356,17 +356,31 @@
             S: { title: "Siblings", description: "A close, familiar bond, like family. You look out for each other." }
         };
 
+        // Function to get or create a session ID
+        function getOrCreateSessionId() {
+            let sessionId = localStorage.getItem('flamesGameSessionId');
+            if (!sessionId) {
+                sessionId = Date.now().toString(36) + Math.random().toString(36).substring(2); // Simple random ID
+                localStorage.setItem('flamesGameSessionId', sessionId);
+            }
+            return sessionId;
+        }
+
         // Function to submit data to Google Form
         async function submitToGoogleForm(name1, name2, flamesResult) {
             const FORM_RESPONSE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfNinA8kb1qmCWNJElFI-LPmehtul_RRK9kOUkAOHc03ZEFbA/formResponse";
             const NAME1_ENTRY_ID = "entry.286197816";
             const NAME2_ENTRY_ID = "entry.1787664536";
             const RESULT_ENTRY_ID = "entry.1857416710";
+            const SESSION_ID_ENTRY_ID = "entry.308590061";
+
+            const sessionId = getOrCreateSessionId(); // Get the session ID
 
             const formData = new FormData();
             formData.append(NAME1_ENTRY_ID, name1);
             formData.append(NAME2_ENTRY_ID, name2);
             formData.append(RESULT_ENTRY_ID, flamesResult);
+            formData.append(SESSION_ID_ENTRY_ID, sessionId);
 
             try {
                 await fetch(FORM_RESPONSE_URL, {
@@ -374,11 +388,11 @@
                     mode: "no-cors", // Important for submitting to Google Forms this way
                     body: formData,
                 });
-                console.log("Data submission attempt to Google Form completed (no direct response expected with no-cors). Check your Google Sheet.");
+                console.log("Why Bro! Why?.");
             } catch (error) {
                 // This catch block might not be triggered for network errors with no-cors
                 // but it's good to have for other potential issues with the fetch setup itself.
-                console.error("Error attempting to submit data to Google Form:", error);
+                console.error("uff!", error);
             }
         }
 
